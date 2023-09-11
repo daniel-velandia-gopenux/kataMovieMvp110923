@@ -2,12 +2,8 @@ package com.xurxodev.moviesandroidkata;
 
 import android.app.Application;
 
-import com.xurxodev.moviesandroidkata.view.di.AppModule;
-import com.xurxodev.moviesandroidkata.view.di.DaggerMoviesComponent;
-import com.xurxodev.moviesandroidkata.view.di.DataModule;
-import com.xurxodev.moviesandroidkata.view.di.MoviesComponent;
-
-import dagger.Module;
+import com.xurxodev.moviesandroidkata.di.component.DaggerMoviesComponent;
+import com.xurxodev.moviesandroidkata.di.component.MoviesComponent;
 
 public class MoviesApplication extends Application {
     private MoviesComponent moviesComponent;
@@ -17,11 +13,7 @@ public class MoviesApplication extends Application {
         super.onCreate();
 
         // Dagger%COMPONENT_NAME%
-        moviesComponent = DaggerMoviesComponent.builder()
-                .appModule(new AppModule(this))
-                .dataModule(new DataModule())
-                .build();
-
+        moviesComponent = DaggerMoviesComponent.factory().create(this);
     }
 
     public MoviesComponent getMoviesComponent() {

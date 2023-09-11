@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.xurxodev.moviesandroidkata.R;
 import com.xurxodev.moviesandroidkata.model.Movie;
+import com.xurxodev.moviesandroidkata.view.events.OnClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,12 @@ import java.util.List;
 public class MoviesAdapter
         extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
+    private List<Movie> movies = new ArrayList<>();
+    private OnClickListener onClickListener;
 
-    public List<Movie> movies = new ArrayList<>();
+    public MoviesAdapter(OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
@@ -40,13 +45,8 @@ public class MoviesAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.movieItem = movies.get(position);
-
-        Picasso.get()
-                .load(holder.movieItem.getImage())
-                .into(holder.movieImageView);
-
-        holder.titleTextView.setText(holder.movieItem .getTitle());
+        Movie movie = movies.get(position);
+        holder.bind(movie, onClickListener);
     }
 
     @Override
@@ -58,13 +58,25 @@ public class MoviesAdapter
         public final ImageView movieImageView;
         public final TextView titleTextView;
 
-        public Movie movieItem;
-
         public ViewHolder(View view) {
             super(view);
 
             movieImageView = (ImageView) view.findViewById(R.id.item_movie_poster);
             titleTextView = (TextView) view.findViewById(R.id.item_movie_title);
+        }
+
+        public void bind(Movie movieItem, OnClickListener onClickListener) {
+            Picasso.get()
+                    .load(movieItem.getImage())
+                    .into(movieImageView);
+
+            titleTextView.setText(movieItem .getTitle());
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClickListener.onClick(movieItem);
+                }
+            });
         }
     }
 }

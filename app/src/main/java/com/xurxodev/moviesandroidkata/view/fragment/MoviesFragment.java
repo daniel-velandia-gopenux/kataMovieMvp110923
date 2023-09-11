@@ -1,6 +1,5 @@
 package com.xurxodev.moviesandroidkata.view.fragment;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,34 +9,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xurxodev.moviesandroidkata.MoviesApplication;
 import com.xurxodev.moviesandroidkata.R;
 import com.xurxodev.moviesandroidkata.model.Movie;
+import com.xurxodev.moviesandroidkata.presenter.boundary.MoviePresenter;
 import com.xurxodev.moviesandroidkata.view.adapter.MoviesAdapter;
-import com.xurxodev.moviesandroidkata.view.boundary.MovieRepository;
+import com.xurxodev.moviesandroidkata.presenter.boundary.MovieView;
+import com.xurxodev.moviesandroidkata.view.events.OnClickListener;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class MoviesFragment extends Fragment {
-
-    @Inject
-    MovieRepository movieRepository;
+public class MoviesFragment extends Fragment implements MovieView {
 
     private MoviesAdapter adapter;
     private RecyclerView recyclerView;
     private View rootView;
     private TextView moviesCountTextView;
     private ImageButton refreshButton;
-
+    @Inject
+    MoviePresenter moviePresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ((MoviesApplication) getActivity().getApplication()).getMoviesComponent().inject(this);
+        ((MoviesApplication) getActivity().getApplication()).getMoviesComponent()
+                .getMovieSubComponent().create(this).inject(this);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class MoviesFragment extends Fragment {
         initializeAdapter();
         initializeRecyclerView();
 
-        loadMovies();
+        moviePresenter.getMovies();
 
         return rootView;
     }
@@ -67,13 +68,18 @@ public class MoviesFragment extends Fragment {
         refreshButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadMovies();
+                moviePresenter.getMovies();
             }
         });
     }
 
     private void initializeAdapter() {
-        adapter = new MoviesAdapter();
+        adapter = new MoviesAdapter(new OnClickListener() {
+            @Override
+            public void onClick(Movie movie) {
+                moviePresenter.onClickItem(movie);
+            }
+        });
     }
 
     private void initializeRecyclerView() {
@@ -81,32 +87,14 @@ public class MoviesFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void loadMovies() {
-        loadingMovies();
-
-        AsyncTask<Void, Void, List<Movie>> moviesAsyncTask =
-                new AsyncTask<Void, Void, List<Movie>>() {
-                    @Override
-                    protected List<Movie> doInBackground(Void... params) {
-
-                        return movieRepository.getMovies();
-                    }
-
-                    @Override
-                    protected void onPostExecute(List<Movie> movies) {
-                        loadedMovies(movies);
-                    }
-                };
-
-        moviesAsyncTask.execute();
-    }
-
-    private void loadingMovies() {
+    @Override
+    public void loadingMovies() {
         adapter.clearMovies();
         moviesCountTextView.setText(R.string.loading_movies_text);
     }
 
-    private void loadedMovies(List<Movie> movies) {
+    @Override
+    public void loadedMovies(List<Movie> movies) {
         adapter.setMovies(movies);
         refreshTitleWithMoviesCount(movies);
     }
@@ -115,5 +103,10 @@ public class MoviesFragment extends Fragment {
         String countText = getString(R.string.movies_count_text);
 
         moviesCountTextView.setText(String.format(countText, movies.size()));
+    }
+
+    @Override
+    public void showError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
