@@ -42,7 +42,7 @@ public class MoviesAdapter
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.movieItem = movies.get(position);
 
-        Picasso.with(holder.movieImageView.getContext())
+        Picasso.get()
                 .load(holder.movieItem.getImage())
                 .into(holder.movieImageView);
 
