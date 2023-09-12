@@ -9,17 +9,23 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.xurxodev.moviesandroidkata.R;
+import com.xurxodev.moviesandroidkata.databinding.ItemMoviesBinding;
 import com.xurxodev.moviesandroidkata.model.Movie;
 import com.xurxodev.moviesandroidkata.view.events.OnClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class MoviesAdapter
         extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
     private List<Movie> movies = new ArrayList<>();
     private OnClickListener onClickListener;
+    private ItemMoviesBinding binding;
+    @Inject
+    Picasso picasso;
 
     public MoviesAdapter(OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
@@ -37,10 +43,10 @@ public class MoviesAdapter
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_movies, parent, false);
+        binding = ItemMoviesBinding.inflate(LayoutInflater.from(parent.getContext()),
+                parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(binding);
     }
 
     @Override
@@ -55,26 +61,23 @@ public class MoviesAdapter
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final ImageView movieImageView;
-        public final TextView titleTextView;
 
-        public ViewHolder(View view) {
-            super(view);
+        public ItemMoviesBinding binding;
 
-            movieImageView = (ImageView) view.findViewById(R.id.item_movie_poster);
-            titleTextView = (TextView) view.findViewById(R.id.item_movie_title);
+        public ViewHolder(ItemMoviesBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         public void bind(Movie movieItem, OnClickListener onClickListener) {
-            Picasso.get()
-                    .load(movieItem.getImage())
-                    .into(movieImageView);
 
-            titleTextView.setText(movieItem .getTitle());
+            picasso.get().load(movieItem.getImage()).into(binding.itemMoviePoster);
+
+            binding.itemMovieTitle.setText(movieItem.getTitle());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onClickListener.onClick(movieItem);
+                    onClickListener.onClick(getAdapterPosition());
                 }
             });
         }

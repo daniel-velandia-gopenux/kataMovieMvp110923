@@ -2,31 +2,29 @@ package com.xurxodev.moviesandroidkata.presenter;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.xurxodev.moviesandroidkata.presenter.boundary.MovieRepository;
 import com.xurxodev.moviesandroidkata.model.Movie;
-import com.xurxodev.moviesandroidkata.presenter.boundary.MoviePresenter;
-import com.xurxodev.moviesandroidkata.presenter.boundary.MovieView;
+import com.xurxodev.moviesandroidkata.presenter.boundary.Contract;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class MoviePresenterImpl implements MoviePresenter {
+public class MoviesPresenterImpl implements Contract.MoviesPresenter {
 
-    MovieView movieView;
-    MovieRepository movieRepository;
+    Contract.MoviesFragmentView fragmentView;
+    Contract.MovieRepository movieRepository;
 
     @Inject
-    public MoviePresenterImpl(MovieView movieView, MovieRepository movieRepository) {
-        this.movieView = movieView;
+    public MoviesPresenterImpl(Contract.MoviesFragmentView fragmentView,
+                               Contract.MovieRepository movieRepository) {
+        this.fragmentView = fragmentView;
         this.movieRepository = movieRepository;
     }
 
     @Override
     public void getMovies() {
-        movieView.loadingMovies();
+        fragmentView.loadingMovies();
 
         @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, List<Movie>> moviesAsyncTask =
                 new AsyncTask<Void, Void, List<Movie>>() {
@@ -40,9 +38,9 @@ public class MoviePresenterImpl implements MoviePresenter {
                     @Override
                     protected void onPostExecute(List<Movie> movies) {
                         if(movies != null) {
-                            movieView.loadedMovies(movies);
+                            fragmentView.loadedMovies(movies);
                         } else {
-                            movieView.showError("movies not found");
+                            fragmentView.showError("movies not found");
                         }
 
                     }
@@ -52,8 +50,8 @@ public class MoviePresenterImpl implements MoviePresenter {
     }
 
     @Override
-    public void onClickItem(Movie movie) {
-        movieView.showError("click item");
+    public void onClickItem(int position) {
+
     }
 
 }

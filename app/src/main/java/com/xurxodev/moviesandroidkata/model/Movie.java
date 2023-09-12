@@ -3,10 +3,12 @@ package com.xurxodev.moviesandroidkata.model;
 public class Movie {
     private String image;
     private String title;
+    private String description;
 
-    public Movie(String image, String title) {
+    public Movie(String image, String title, String description) {
         this.image = image;
         this.title = title;
+        this.description = description;
     }
 
     public String getImage() {
@@ -15,5 +17,9 @@ public class Movie {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

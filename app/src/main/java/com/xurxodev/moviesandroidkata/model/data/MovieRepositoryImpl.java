@@ -7,17 +7,16 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.xurxodev.moviesandroidkata.R;
 import com.xurxodev.moviesandroidkata.model.Movie;
-import com.xurxodev.moviesandroidkata.presenter.boundary.MovieRepository;
+import com.xurxodev.moviesandroidkata.presenter.boundary.Contract;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class MovieRepositoryImpl implements MovieRepository {
+public class MovieRepositoryImpl implements Contract.MovieRepository {
 
     private Context applicationContext;
     private Gson gson;

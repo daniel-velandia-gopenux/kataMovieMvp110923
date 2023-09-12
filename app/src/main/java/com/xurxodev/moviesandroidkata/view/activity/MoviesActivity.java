@@ -2,16 +2,19 @@ package com.xurxodev.moviesandroidkata.view.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
-import com.xurxodev.moviesandroidkata.R;
+import com.xurxodev.moviesandroidkata.databinding.ActivityMoviesBinding;
 import com.xurxodev.moviesandroidkata.view.fragment.MoviesFragment;
 
 public class MoviesActivity extends AppCompatActivity {
+
+    ActivityMoviesBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movies);
+        binding = ActivityMoviesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         initializeToolBar();
 
@@ -24,12 +27,12 @@ public class MoviesActivity extends AppCompatActivity {
         MoviesFragment fragment = new MoviesFragment();
 
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.movies_list_container, fragment)
+                .add(binding.moviesListContainer.getId(), fragment)
                 .commit();
+
     }
 
     private void initializeToolBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
     }
 }
