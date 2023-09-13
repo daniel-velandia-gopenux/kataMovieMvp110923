@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.xurxodev.moviesandroidkata.R;
 import com.xurxodev.moviesandroidkata.model.Movie;
 import com.xurxodev.moviesandroidkata.presenter.MoviesPresenter;
+import com.xurxodev.moviesandroidkata.presenter.boundary.MovieRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +19,7 @@ import javax.inject.Inject;
 
 import timber.log.Timber;
 
-public class MovieRepositoryImpl implements MoviesPresenter.MovieRepository {
+public class MovieRepositoryImpl implements MovieRepository {
 
     private final Context applicationContext;
     private final Gson gson;
@@ -37,6 +38,16 @@ public class MovieRepositoryImpl implements MoviesPresenter.MovieRepository {
         simulateDelay();
 
         return Arrays.asList(movies);
+    }
+
+    @Override
+    public Movie getMovie(int position) {
+
+        Movie[] movies = transformGson();
+
+        simulateDelay();
+
+        return movies[position];
     }
 
     private Movie[] transformGson() {

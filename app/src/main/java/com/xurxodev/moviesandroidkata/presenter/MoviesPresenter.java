@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import com.xurxodev.moviesandroidkata.model.Movie;
+import com.xurxodev.moviesandroidkata.presenter.boundary.MovieRepository;
 import com.xurxodev.moviesandroidkata.view.fragment.MoviesFragment;
 
 import java.util.List;
@@ -44,11 +45,6 @@ public class MoviesPresenter {
                 };
 
         moviesAsyncTask.execute();
-    }
-
-    public interface MovieRepository {
-
-        List<Movie> getMovies();
     }
 
 }

@@ -13,7 +13,9 @@ import com.xurxodev.moviesandroidkata.R;
 import com.xurxodev.moviesandroidkata.databinding.FragmentMoviesBinding;
 import com.xurxodev.moviesandroidkata.model.Movie;
 import com.xurxodev.moviesandroidkata.presenter.MoviesPresenter;
+import com.xurxodev.moviesandroidkata.view.activity.MoviesActivity;
 import com.xurxodev.moviesandroidkata.view.adapter.MoviesAdapter;
+import com.xurxodev.moviesandroidkata.view.event.OnClickItemListener;
 
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class MoviesFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         ((MoviesApplication) getActivity().getApplication()).getMoviesComponent()
-                .getMovieSubComponent().create(this).inject(this);
+                .getMoviesSubComponent().create(this).inject(this);
     }
 
     @Override
@@ -59,7 +61,12 @@ public class MoviesFragment extends Fragment {
     }
 
     private void initializeAdapter() {
-        adapter = new MoviesAdapter();
+        adapter = new MoviesAdapter(new OnClickItemListener() {
+            @Override
+            public void onClick(int position) {
+                changeFragment(position);
+            }
+        });
     }
 
     private void initializeRecyclerView() {
@@ -82,7 +89,12 @@ public class MoviesFragment extends Fragment {
         binding.moviesTitleTextView.setText(String.format(countText, movies.size()));
     }
 
-    public void showError(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    public void showError(String moviesNotFound) {
+        Toast.makeText(getContext(), moviesNotFound, Toast.LENGTH_SHORT).show();
+    }
+
+    public void changeFragment(int position) {
+        MoviesActivity moviesActivity = (MoviesActivity) getActivity();
+        moviesActivity.showMovieFragment(position);
     }
 }

@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.xurxodev.moviesandroidkata.model.data.MovieRepositoryImpl;
 import com.xurxodev.moviesandroidkata.presenter.MoviesPresenter;
+import com.xurxodev.moviesandroidkata.presenter.boundary.MovieRepository;
 
 import javax.inject.Singleton;
 
@@ -28,8 +29,8 @@ public class DataModule {
 
     @Provides
     @Singleton
-    MoviesPresenter.MovieRepository provideMovieRepository(Application applicationContext, Gson gson) {
-        MoviesPresenter.MovieRepository movieRepository = new MovieRepositoryImpl(applicationContext, gson);
+    MovieRepository provideMovieRepository(Application applicationContext, Gson gson) {
+        MovieRepository movieRepository = new MovieRepositoryImpl(applicationContext, gson);
         return movieRepository;
     }
 
