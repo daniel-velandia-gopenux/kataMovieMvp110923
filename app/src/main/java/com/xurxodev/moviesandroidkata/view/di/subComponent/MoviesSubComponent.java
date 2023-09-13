@@ -1,6 +1,5 @@
-package com.xurxodev.moviesandroidkata.di.subComponent;
+package com.xurxodev.moviesandroidkata.view.di.subComponent;
 
-import com.xurxodev.moviesandroidkata.presenter.boundary.Contract;
 import com.xurxodev.moviesandroidkata.view.fragment.MoviesFragment;
 
 import dagger.BindsInstance;
@@ -12,6 +11,6 @@ public interface MoviesSubComponent {
 
     @Subcomponent.Factory
     interface Factory {
-        MoviesSubComponent create(@BindsInstance Contract.MoviesFragmentView fragmentView);
+        MoviesSubComponent create(@BindsInstance MoviesFragment moviesFragment);
     }
 }

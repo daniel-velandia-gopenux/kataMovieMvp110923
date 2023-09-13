@@ -8,7 +8,7 @@ import com.xurxodev.moviesandroidkata.view.fragment.MoviesFragment;
 
 public class MoviesActivity extends AppCompatActivity {
 
-    ActivityMoviesBinding binding;
+    private ActivityMoviesBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

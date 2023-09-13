@@ -1,9 +1,9 @@
-package com.xurxodev.moviesandroidkata.di.component;
+package com.xurxodev.moviesandroidkata.view.di.component;
 
 import android.app.Application;
 
-import com.xurxodev.moviesandroidkata.di.SubComponents;
-import com.xurxodev.moviesandroidkata.di.subComponent.MoviesSubComponent;
+import com.xurxodev.moviesandroidkata.view.di.SubComponents;
+import com.xurxodev.moviesandroidkata.view.di.subComponent.MoviesSubComponent;
 
 import javax.inject.Singleton;
 

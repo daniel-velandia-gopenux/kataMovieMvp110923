@@ -4,43 +4,40 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import com.xurxodev.moviesandroidkata.model.Movie;
-import com.xurxodev.moviesandroidkata.presenter.boundary.Contract;
+import com.xurxodev.moviesandroidkata.view.fragment.MoviesFragment;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class MoviesPresenterImpl implements Contract.MoviesPresenter {
+public class MoviesPresenter {
 
-    Contract.MoviesFragmentView fragmentView;
-    Contract.MovieRepository movieRepository;
+    private final MoviesFragment moviesFragment;
+    private final MovieRepository movieRepository;
 
     @Inject
-    public MoviesPresenterImpl(Contract.MoviesFragmentView fragmentView,
-                               Contract.MovieRepository movieRepository) {
-        this.fragmentView = fragmentView;
+    public MoviesPresenter(MoviesFragment moviesFragment, MovieRepository movieRepository) {
+        this.moviesFragment = moviesFragment;
         this.movieRepository = movieRepository;
     }
 
-    @Override
     public void getMovies() {
-        fragmentView.loadingMovies();
+        moviesFragment.loadingMovies();
 
         @SuppressLint("StaticFieldLeak") AsyncTask<Void, Void, List<Movie>> moviesAsyncTask =
                 new AsyncTask<Void, Void, List<Movie>>() {
                     @Override
                     protected List<Movie> doInBackground(Void... params) {
 
-                         // String.valueOf(movieRepository.getMovies().size())
                         return movieRepository.getMovies();
                     }
 
                     @Override
                     protected void onPostExecute(List<Movie> movies) {
                         if(movies != null) {
-                            fragmentView.loadedMovies(movies);
+                            moviesFragment.loadedMovies(movies);
                         } else {
-                            fragmentView.showError("movies not found");
+                            moviesFragment.showError("movies not found");
                         }
 
                     }
@@ -49,9 +46,9 @@ public class MoviesPresenterImpl implements Contract.MoviesPresenter {
         moviesAsyncTask.execute();
     }
 
-    @Override
-    public void onClickItem(int position) {
+    public interface MovieRepository {
 
+        List<Movie> getMovies();
     }
 
 }

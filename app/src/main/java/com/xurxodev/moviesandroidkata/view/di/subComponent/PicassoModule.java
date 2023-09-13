@@ -1,4 +1,4 @@
-package com.xurxodev.moviesandroidkata.di.subComponent;
+package com.xurxodev.moviesandroidkata.view.di.subComponent;
 
 import android.content.Context;
 

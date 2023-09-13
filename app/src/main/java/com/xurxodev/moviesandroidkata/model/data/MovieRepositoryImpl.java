@@ -7,7 +7,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.xurxodev.moviesandroidkata.R;
 import com.xurxodev.moviesandroidkata.model.Movie;
-import com.xurxodev.moviesandroidkata.presenter.boundary.Contract;
+import com.xurxodev.moviesandroidkata.presenter.MoviesPresenter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,10 +16,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MovieRepositoryImpl implements Contract.MovieRepository {
+import timber.log.Timber;
 
-    private Context applicationContext;
-    private Gson gson;
+public class MovieRepositoryImpl implements MoviesPresenter.MovieRepository {
+
+    private final Context applicationContext;
+    private final Gson gson;
 
     @Inject
     public MovieRepositoryImpl(Application applicationContext, Gson gson){
@@ -42,7 +44,7 @@ public class MovieRepositoryImpl implements Contract.MovieRepository {
             String jsonString = getJsonString();
             return gson.fromJson(jsonString, Movie[].class);
         } catch (IOException e){
-            Log.e("error while read file", e.getMessage());
+            Timber.tag("error while read file").e(e);
         }
         return new Movie[0];
     }

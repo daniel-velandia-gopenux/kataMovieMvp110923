@@ -12,20 +12,19 @@ import com.xurxodev.moviesandroidkata.MoviesApplication;
 import com.xurxodev.moviesandroidkata.R;
 import com.xurxodev.moviesandroidkata.databinding.FragmentMoviesBinding;
 import com.xurxodev.moviesandroidkata.model.Movie;
-import com.xurxodev.moviesandroidkata.presenter.boundary.Contract;
+import com.xurxodev.moviesandroidkata.presenter.MoviesPresenter;
 import com.xurxodev.moviesandroidkata.view.adapter.MoviesAdapter;
-import com.xurxodev.moviesandroidkata.view.events.OnClickListener;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-public class MoviesFragment extends Fragment implements Contract.MoviesFragmentView {
+public class MoviesFragment extends Fragment {
 
     private MoviesAdapter adapter;
     private FragmentMoviesBinding binding;
     @Inject
-    Contract.MoviesPresenter moviesPresenter;
+    MoviesPresenter moviesPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,25 +59,18 @@ public class MoviesFragment extends Fragment implements Contract.MoviesFragmentV
     }
 
     private void initializeAdapter() {
-        adapter = new MoviesAdapter(new OnClickListener() {
-            @Override
-            public void onClick(int position) {
-                moviesPresenter.onClickItem(position);
-            }
-        });
+        adapter = new MoviesAdapter();
     }
 
     private void initializeRecyclerView() {
         binding.recyclerviewMovies.setAdapter(adapter);
     }
 
-    @Override
     public void loadingMovies() {
         adapter.clearMovies();
         binding.moviesTitleTextView.setText(R.string.loading_movies_text);
     }
 
-    @Override
     public void loadedMovies(List<Movie> movies) {
         adapter.setMovies(movies);
         refreshTitleWithMoviesCount(movies);
@@ -90,7 +82,6 @@ public class MoviesFragment extends Fragment implements Contract.MoviesFragmentV
         binding.moviesTitleTextView.setText(String.format(countText, movies.size()));
     }
 
-    @Override
     public void showError(String message) {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
